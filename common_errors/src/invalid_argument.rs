@@ -11,11 +11,22 @@ impl Information{
 		Self{name,cause}
 	}
 	
-	pub fn name(&self)->Option<&String>{
-		self.name.as_ref()
+	pub fn new_both(name:String,cause:String)->Self{
+		Self{name:Some(name),cause:Some(cause)}
 	}
-	pub fn cause(&self)->Option<&String>{
-		self.cause.as_ref()
+	pub fn new_name(name:String)->Self{
+		Self{name:Some(name),cause:None}
+	}
+	
+	pub fn new_cause(cause:String)->Self{
+		Self{name:None,cause:Some(cause)}
+	}
+	
+	pub fn name(&self)->Option<&str>{
+		self.name.as_deref()
+	}
+	pub fn cause(&self)->Option<&str>{
+		self.cause.as_deref()
 	}
 }
 
@@ -37,8 +48,10 @@ impl Display for Information{
 
 #[derive(Debug, ThisError)]
 pub enum Error{
-	InvalidArgument(String),
-	ArgumentOutOfRange(String),
+	#[error("invalid argument:{0}")]
+	InvalidArgument(Information),
+	#[error("argument out of range:{0}")]
+	ArgumentOutOfRange(Information),
 }
 
 
@@ -47,7 +60,7 @@ mod tests {
 	use super::*;
 	#[test]
 	fn it_works() {
-		let e= Error::InvalidArgument("test".to_string());
+		let e= Error::InvalidArgument(Information::new(Some("name".to_string()),Some("cause".to_string())));
 		println!("{}",&e)
 	}
 }
