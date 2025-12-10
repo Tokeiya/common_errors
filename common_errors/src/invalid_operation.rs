@@ -16,3 +16,9 @@ impl From<String> for Error {
 		Self(value)
 	}
 }
+
+impl From<&str> for Error {
+	fn from(value: &str) -> Self {
+		Self(value.to_string())
+	}
+}
